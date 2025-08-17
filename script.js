@@ -34,15 +34,21 @@ const ops=document.querySelectorAll('.op')
 const eq=document.querySelector('.eq')
 const screen=document.querySelector('.screen')
 const clear=document.querySelector('.clr')
+const del=document.querySelector('.del')
 let str=''
 let dotCount=0
 let str1=''
 let str2=''
 let operand=''
 let opCount=0;
+let flag=0
 
 keys.forEach(function(key){
     key.addEventListener('click',function(){
+        if(flag===1){
+            clear.click()
+            flag=0;
+        }
         if(key.value!='.'||dotCount===0){
             if(key.value==='.')dotCount++;
             str+=key.value
@@ -80,6 +86,7 @@ eq.addEventListener('click',function(){
         screen.textContent=str1
         str=''
         dotCount=0
+        flag=1
     }
 })
 
@@ -91,4 +98,38 @@ clear.addEventListener('click',function(){
     operand=''
     screen.textContent=str
     opCount=0
+})
+
+del.addEventListener('click',function(){
+    if(operand==''||str.length!=0){
+        str = str.slice(0, -1); 
+        screen.textContent=str
+    }
+})
+
+document.addEventListener('keydown',function(e){
+    if((parseInt(e.key)>=0&&parseInt(e.key)<=9)||e.key==='.'){
+        keys.forEach(function(key){
+            if(key.value===e.key){
+                key.click()
+            }
+        })
+    }
+    if(e.key==='+'||e.key==='-'||e.key==='/'||e.key==='*'){
+        ops.forEach(function(op){
+            if(op.value===e.key){
+                op.click()
+            }
+        })
+    }
+    if(e.key==='Backspace'){
+        del.click()
+    }
+    if(e.key=='Enter'||e.key=='='){
+        eq.click()
+    }
+    if (e.key === 'Escape') {
+    clear.click();
+    }
+
 })
